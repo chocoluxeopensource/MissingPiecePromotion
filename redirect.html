@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Redirecting...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .feather-spin {
+            animation: spin 1.5s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+
+    <div id="redirect-card" class="bg-white p-12 rounded-xl shadow-2xl max-w-sm w-full text-center transform transition-transform duration-500 hover:scale-[1.01]">
+        <div id="content-container">
+            
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetUrl = urlParams.get('redirect');
+        const delay = 1500; 
+        const allowedInternalPaths = ["missingpiece", "404", "index"];
+        const allowedList = allowedInternalPaths.map(p => `<code class="bg-gray-100 text-gray-700 p-1 rounded-md text-xs font-mono">${p}</code>`).join(', ');
+
+        const contentContainer = document.getElementById('content-container');
+        const card = document.getElementById('redirect-card');
+        const pageTitle = document.getElementById('page-title');
+
+        // Function to check if a URL is external
+        const isExternalUrl = (url) => /^https?:\/\//i.test(url);
+
+        // Function to render an error state
+        const showErrorState = (icon, title, color, message, details) => {
+            pageTitle.textContent = "Error: " + title;
+            card.classList.add('border-4', `border-${color}-200`);
+            
+            let detailHtml = '';
+            if (details) {
+                detailHtml = `<p class="text-sm text-gray-500 mt-4">${details}</p>`;
+            }
+
+            contentContainer.innerHTML = `
+                <i data-feather="${icon}" class="h-8 w-8 text-${color}-500 mx-auto mb-4"></i>
+                <h1 class="text-xl font-semibold text-gray-800 mb-2">${title}</h1>
+                <p class="text-gray-600 mb-6 font-medium">${message}</p>
+                ${detailHtml}
+            `;
+            // Must replace Feather icons after injecting new HTML
+            feather.replace();
+        };
+
+        if (!targetUrl) {
+            // --- MISSING PARAMETER ERROR STATE ---
+            showErrorState(
+                "alert-triangle", 
+                "Missing Parameter", 
+                "red",
+                "The required destination path is missing.", 
+                `Please append the destination using the <code class="bg-red-100 text-red-700 p-1 rounded-md text-xs font-mono">?redirect=PATH</code> parameter. Only the following internal paths are permitted: ${allowedList}.`
+            );
+        } else {
+            const isValidExternal = isExternalUrl(targetUrl);
+            const isValidInternal = allowedInternalPaths.includes(targetUrl.toLowerCase());
+            
+            if (isValidInternal) {
+                // --- REDIRECTING STATE (Parameter Found and Valid Internal) ---
+                
+                let finalRedirectTarget = targetUrl; // Default target is what was provided
+
+                // Check for the special case: if target is "missingpiece", redirect to "index"
+                if (targetUrl.toLowerCase() === "missingpiece") {
+                    finalRedirectTarget = "index"; 
+                }
+                
+                pageTitle.textContent = "Redirecting...";
+
+                contentContainer.innerHTML = `
+                    <i data-feather="loader" class="feather-spin h-8 w-8 text-indigo-600 mx-auto mb-4"></i>
+                    <h1 class="text-xl font-semibold text-gray-800 mb-2">Redirecting...</h1>
+                    <p class="text-gray-500 mb-6">You will be automatically redirected to your destination shortly.</p>
+                    <a href="${finalRedirectTarget}" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-medium transition duration-150 inline-block border-b border-dashed border-indigo-300 hover:border-indigo-800">
+                        Not redirected? Click here
+                    </a>
+                `;
+                feather.replace();
+                
+                setTimeout(() => {
+                    // Use the potentially modified finalRedirectTarget
+                    window.location.replace(finalRedirectTarget);
+                }, delay);
+
+            } else if (isValidExternal) {
+                 // --- ERROR STATE: EXTERNAL URL BLOCKED ---
+                showErrorState(
+                    "alert-octagon", 
+                    "External URL Blocked", 
+                    "orange",
+                    "Redirection to external websites is disabled for security reasons.",
+                    `Only the following internal paths are permitted: ${allowedList}.`
+                );
+            } else {
+                // --- ERROR STATE: INVALID INTERNAL PATH ---
+                showErrorState(
+                    "alert-octagon", 
+                    "Invalid Internal Path", 
+                    "orange",
+                    "The specified internal redirect path is not recognized.",
+                    `Only the following internal paths are permitted: ${allowedList}.`
+                );
+            }
+        }
+    </script>
+
+</body>
+</html>

